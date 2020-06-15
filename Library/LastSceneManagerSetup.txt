@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/GifTest.unity
+- path: Assets/Scenes/SceneitTogether.unity
   isLoaded: 1
   isActive: 1

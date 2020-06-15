@@ -31,11 +31,11 @@ public class VideoPlayerCtrl : MonoBehaviour
             vp.Stop();
     }
 
-    public void vpPlayStop()
+    public void vpPlayPause()
     {
         // this object was clicked - do something
         if (vp.isPlaying)
-            vp.Stop();
+            vp.Pause();
         else
             vp.Play();
     }
