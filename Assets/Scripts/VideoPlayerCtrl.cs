@@ -16,7 +16,8 @@ public class VideoPlayerCtrl : MonoBehaviour
     public void vpPlay()
     {
         if(!vp.isPlaying)
-            vp.Play();
+            vp.Stop();
+        vp.Play();
     }
 
     public void vpPause()

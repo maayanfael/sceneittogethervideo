@@ -15,7 +15,7 @@ namespace GetSocialSdk.Capture.Scripts
     public class GetSocialCapture : MonoBehaviour
     {
 
-        public System.Action<string> onDebug;
+        public System.Action<string> FilePathChangeEvent;
 
         /// <summary>
         /// Defines how frames are captured.
@@ -64,7 +64,10 @@ namespace GetSocialSdk.Capture.Scripts
         /// Captured content.
         /// </summary>
         public Camera capturedCamera;
-        
+
+        public static string ContentFolderName = "gifresult";
+        public static string GifName = "gifresult";
+
         #endregion
 
         #region Private variables
@@ -75,6 +78,7 @@ namespace GetSocialSdk.Capture.Scripts
         private Recorder _recorder;
 
         private const string GeneratedContentFolderName = "gifresult";
+        
 
         #endregion
 
@@ -127,7 +131,7 @@ namespace GetSocialSdk.Capture.Scripts
                     () =>
                     {
 
-                        if (onDebug != null) onDebug.Invoke("Result: " + _resultFilePath);
+                        if (FilePathChangeEvent != null) FilePathChangeEvent.Invoke("Result: " + _resultFilePath);
                         Debug.Log("Result: " + _resultFilePath);
                         
                         MainThreadExecutor.Queue(() => {
@@ -178,15 +182,22 @@ namespace GetSocialSdk.Capture.Scripts
 
         #region Private methods
 
-        private static string GetResultDirectory()
+        private string GetResultDirectory()
         {
             string resultDirPath;
             #if UNITY_EDITOR
-                resultDirPath = Application.dataPath; 
-            #else
-                resultDirPath = Application.persistentDataPath; 
-            #endif
-            resultDirPath += Path.DirectorySeparatorChar + GeneratedContentFolderName;
+                resultDirPath = Application.dataPath;
+
+
+#else
+              resultDirPath = Application.persistentDataPath; 
+            resultDirPath = new System.Uri(
+        System.IO.Path.GetDirectoryName(
+            System.Reflection.Assembly.GetExecutingAssembly().CodeBase)
+        ).LocalPath;
+#endif
+            //resultDirPath += Path.DirectorySeparatorChar + GeneratedContentFolderName;
+            resultDirPath += Path.DirectorySeparatorChar + GeneratedContentFolderName+ Path.DirectorySeparatorChar + ContentFolderName;
 
             if (!Directory.Exists(resultDirPath))
             {
@@ -198,17 +209,21 @@ namespace GetSocialSdk.Capture.Scripts
         private void InitSession()
         {
             _captureId = Guid.NewGuid().ToString();
-            var fileName = string.Format("result-{0}.gif", _captureId);
+            var fileName = GifName;
+            //var fileName = string.Format("result-{0}.gif", _captureId);
             _resultFilePath = GetResultDirectory() + Path.DirectorySeparatorChar + fileName;
             StoreWorker.Instance.Start(ThreadPriority.BelowNormal, maxCapturedFrames);
         }
         
         private void CleanUp()
         {
+            
             if (File.Exists(_resultFilePath))
             {
                 File.Delete(_resultFilePath);
             }
+
+            InitSession();
         }
         
         #endregion

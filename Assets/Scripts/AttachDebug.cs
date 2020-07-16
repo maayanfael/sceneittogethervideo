@@ -17,8 +17,8 @@ public class AttachDebug : MonoBehaviour
     private void Reset()
     {
         //if (Debugger == null) Debugger = GameObject.FindObjectOfType<ManageStoryBoardFiles>();
-        if (Debugger2 == null) Debugger2 = GameObject.FindObjectOfType<ReadCameraToTexture>();
-        if (Debugger3 == null) Debugger3 = GameObject.FindObjectOfType<GetSocialCapture>();
+        //if (Debugger2 == null) Debugger2 = GameObject.FindObjectOfType<ReadCameraToTexture>();
+        //if (Debugger3 == null) Debugger3 = GameObject.FindObjectOfType<GetSocialCapture>();
 
 
     }
@@ -40,7 +40,7 @@ public class AttachDebug : MonoBehaviour
     {//TODO fix reference
         //Debugger.onDebug += ChangeText;
         //Debugger2.onDebug += ChangeText;
-        Debugger3.onDebug += ChangeText;
+        //Debugger3.onDebug += ChangeText;
 
     }
     private void OnDisable()
@@ -49,8 +49,8 @@ public class AttachDebug : MonoBehaviour
          //   Debugger.onDebug -= ChangeText;
        // if (Debugger2)
            // Debugger2.onDebug -= ChangeText;
-         if (Debugger3)
-          Debugger3.onDebug -= ChangeText;
+         //if (Debugger3)
+          //Debugger3.onDebug -= ChangeText;
     }
 
     void ChangeText(string textToChangeParam)

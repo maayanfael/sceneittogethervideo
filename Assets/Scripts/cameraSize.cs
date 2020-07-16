@@ -5,6 +5,7 @@ using UnityEngine;
 public class cameraSize : MonoBehaviour
 {
     private Camera m_OrthographicCamera;
+    public Transform cameraPlace;
     //These are the positions and dimensions of the Camera view in the Game view
     public float m_ViewPositionX, m_ViewPositionY, m_ViewWidth, m_ViewHeight;
 
@@ -26,6 +27,8 @@ public class cameraSize : MonoBehaviour
     public void changeRatio()
     {
         m_OrthographicCamera.aspect = (float)(m_ViewWidth / m_ViewHeight);
-        m_OrthographicCamera.pixelRect = new Rect(m_ViewPositionX, m_ViewPositionY, m_ViewWidth, m_ViewHeight);
+        
+        m_OrthographicCamera.pixelRect = new Rect(cameraPlace.position.x, cameraPlace.position.y, m_ViewWidth, m_ViewHeight);
+        
     }
 }

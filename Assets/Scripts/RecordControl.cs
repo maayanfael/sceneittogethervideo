@@ -2,69 +2,68 @@
 using System.Linq;
 using GetSocialSdk.Capture.Scripts;
 using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class RecordControl : MonoBehaviour
 {
-	public GameObject capturePreviewMenuUI;
+
+    #region Public fields
+    public GameObject capturePreviewMenuUI;
+	public GameObject recorderScreenUI;
+	public GameObject exportMenuUI;
 	public GetSocialCapturePreview capturePreview;
 	public VideoData videoData;
 	public blink recordIndication;
 	public syncSceneTiming syncSceneTiming;
+    public TextMeshProUGUI ScreenTitle;
+    #endregion
 
-	private GetSocialCapture _capture;
+
+    #region Private fields
+    private GetSocialCapture _capture;
 	private bool isRecording = false;
 	private float preperationTime = 3f;
 	private float startRecordingTime;
 	private float currentRecordLength;
-	
 
-	//	private bool startedFlag = false;
-	void Awake()
+    private float StartTimeDebug;
+
+    #endregion
+
+    #region Unity methods
+    //	private bool startedFlag = false;
+    void Awake()
 	{
 		_capture = GetComponent<GetSocialCapture>();
 	}
 
 	private void Start()
 	{
+        //capturePreview.GetComponent<RawImage>().enabled = false;
+    }
 
-		//capturePreview.GetComponent<RawImage>().enabled = false;
-	}
+    #endregion
 
-	public void startRecording()
+
+    #region Public methods
+
+    public void StartRecording()        
 	{
-		Invoke("record", preperationTime);
-		Debug.Log("record pressed");
+        capturePreview.Clear();
+        currentRecordLength = videoData.getCurrentSceneLength();
+        GetSocialCapture.ContentFolderName = videoData.getCurrentSceneName();
+        GetSocialCapture.GifName = videoData.getCurrentCharacterName();
+
+        Invoke("Record", preperationTime);
+        Invoke("StopRacording", currentRecordLength);
+        Debug.Log("record pressed");
 
 		capturePreview.Stop();
 		//capturePreview.GetComponent<RawImage>().enabled = false;
-
-		
-
-
-		currentRecordLength = videoData.getCurrentSceneLength();
-		
-
-		
-		
+        
 	}
-
-	public void record()
-	{
-		if (!isRecording)
-		{
-			recordIndication.startBlinking();
-
-			startRecordingTime = Time.realtimeSinceStartup;
-			isRecording = true;
-			Debug.Log("Start recording");
-			_capture.StartCapture();
-
-			Invoke("stopRacording", currentRecordLength);
-		}
-	}
-
 
 
 	public void ShareResult()
@@ -74,47 +73,82 @@ public class RecordControl : MonoBehaviour
 		{
 		};
 		_capture.GenerateCapture(result);
-		//SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-	}
+        exportMenuUI.SetActive(true);
 
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 
-	public void stopRacording()
+    public void HideExportMenu()
+    {
+        exportMenuUI.SetActive(false);
+    }
+
+    public void StopRacording()
 	{
 		if (isRecording)
 		{
 			recordIndication.stopBlinking();
 			// stop recording
 			_capture.StopCapture();
-			Debug.Log("Stop recording");
+			Debug.LogWarning("Stop recording, recorded: " + Time.realtimeSinceStartup+ " Took "+ (Time.realtimeSinceStartup-startRecordingTime));
 			isRecording = false;
 
-			showPreview();
+			ShowPreview();
 		}
 	}
 
 
-	public void showPreview()
+	public void ShowPreview()
 	{
 		capturePreviewMenuUI.SetActive(true);
-		//capturePreview.GetComponent<RawImage>().enabled = true;
-		syncSceneTiming.startPlaying();
-		//startCapturePreview();
+        recorderScreenUI.SetActive(false);
+
 	}
 
-	public void hidePreview()
+
+	public void HidePreview()
 	{
-		capturePreviewMenuUI.SetActive(false);
-		//capturePreview.GetComponent<RawImage>().enabled = true;
-		stopCapturePreview();
+        recorderScreenUI.SetActive(true);
+        capturePreviewMenuUI.SetActive(false);
+
+		StopCapturePreview();
 	}
 
-	public void stopCapturePreview()
-	{
-		capturePreview.Stop();
-	}
+    public void SetScreenTitle()
+    {
+        ScreenTitle.text = "Playing As " + videoData.getCurrentCharacterName();
+    }
 
-	public void startCapturePreview()
-	{
-		capturePreview.Play();
-	}
+    #endregion
+
+
+    #region Private methods
+
+    private void Record()
+    {
+        if (!isRecording)
+        {
+            recordIndication.startBlinking();
+
+            startRecordingTime = Time.realtimeSinceStartup;
+            isRecording = true;
+            Debug.Log("Start recording time: " + startRecordingTime);
+            _capture.StartCapture();
+
+
+        }
+    }
+
+    private void StopCapturePreview()
+    {
+        capturePreview.Stop();
+    }
+
+    private void StartCapturePreview()
+    {
+        capturePreview.Play();
+    }
+
+    
+    #endregion
 }

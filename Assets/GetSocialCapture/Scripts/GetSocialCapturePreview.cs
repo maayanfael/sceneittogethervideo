@@ -58,8 +58,20 @@ namespace GetSocialSdk.Capture.Scripts
         public void Stop()
         {
             _play = false;
+            _playbackStartTime = 0;
         }
 
+        public void Clear()
+        {
+            if(_framesToPlay != null)
+            {
+                _framesToPlay.Clear();
+                _framesToPlay = null;
+                _framesToPlay = new List<Texture2D>();
+            }
+            
+            _previewInitialized = false;
+        }
         #endregion
 
         #region Private methods
@@ -112,12 +124,14 @@ namespace GetSocialSdk.Capture.Scripts
             if (_framesToPlay.Count == 0) return;
             if (Math.Abs(_playbackStartTime) < 0.0001f)
             {
-                _playbackStartTime = Time.time;
+                _playbackStartTime = Time.realtimeSinceStartup;
+                
             }
-            var index = (int)((Time.time - _playbackStartTime) * playbackFrameRate) % _framesToPlay.Count;
+            var index = (int)((Time.realtimeSinceStartup - _playbackStartTime) * playbackFrameRate) % _framesToPlay.Count;
             _rawImage.texture = _framesToPlay[index];
             if (index == _framesToPlay.Count - 1 && !loopPlayback)
             {
+                Debug.LogWarning(" Stop playnig Capture," + Time.realtimeSinceStartup + " Took: " +(Time.realtimeSinceStartup - _playbackStartTime) );
                 _play = false;
             }
         }

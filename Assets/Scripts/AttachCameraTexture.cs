@@ -27,7 +27,7 @@ public class AttachCameraTexture : MonoBehaviour
 
     private void OnNewTexture2dFromCamera(Texture2D camTxtur) {
 
-        Debug.Log("Update camera with new textures");
+        //Debug.Log("Update camera with new textures");
         //img.dis\ = true;
         img.enabled = false;
         //img.material.mainTexture = null;

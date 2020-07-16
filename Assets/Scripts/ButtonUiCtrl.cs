@@ -6,30 +6,45 @@ using UnityEngine.UI;
 public class ButtonUiCtrl : MonoBehaviour
 {
 
-    public Button Start;
-    public Button Stop;
-    bool isStartActive = false;
+    public Button StartBtn;
+    public Button StopBtn;
+    bool isStartBtnActive = false;
+    public VideoData vd;
+
+    private void Start()
+    {
+        vd.CharacterVp.loopPointReached += EndReached;
+    }
 
     public void ShowPlayBtn()
     {
-        Start.gameObject.SetActive(true);
-        Stop.gameObject.SetActive(false);
+        StartBtn.gameObject.SetActive(true);
+        StopBtn.gameObject.SetActive(false);
 
-        isStartActive = true;
+        isStartBtnActive = true;
     }
 
     public void ShowStopBtn()
-    {
-        Start.gameObject.SetActive(false);
-        Stop.gameObject.SetActive(true);
+    {   
+        StartBtn.gameObject.SetActive(false);
+        StopBtn.gameObject.SetActive(true);
 
-        isStartActive = false;
+        isStartBtnActive = false;
+        
+    }
+
+    public void HideStopBtn()
+    {
+        StartBtn.gameObject.SetActive(false);
+        StopBtn.gameObject.SetActive(false);
+
+        isStartBtnActive = false;
     }
 
     public void SwitchToOtherBtn()
     {
-        isStartActive = !isStartActive;
-        if (!isStartActive)
+        isStartBtnActive = !isStartBtnActive;
+        if (!isStartBtnActive)
         {
             ShowStopBtn();
         }
@@ -37,8 +52,11 @@ public class ButtonUiCtrl : MonoBehaviour
         {
             ShowPlayBtn();
         }
+    }
 
-
+    void EndReached(UnityEngine.Video.VideoPlayer vp)
+    {
+        ShowPlayBtn();
     }
 
 }
