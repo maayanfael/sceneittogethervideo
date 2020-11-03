@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.UI.Dropdown;
@@ -22,10 +23,10 @@ public class DropdownFiller : MonoBehaviour
 
     public void fillCharDropdown()
     {
-        Dropdown m_Dropdown;
+        TMP_Dropdown m_Dropdown;
 
         //Fetch the Dropdown GameObject the script is attached to
-        m_Dropdown = GameObject.Find(CharacterDropdownName).GetComponent<Dropdown>();
+        m_Dropdown = GameObject.Find(CharacterDropdownName).GetComponent<TMP_Dropdown>();
 
 
         List<string> options = videoData.getVideoOptions();
@@ -36,22 +37,22 @@ public class DropdownFiller : MonoBehaviour
 
         for (int i = 0; i < options.Count; i++)
         {
-            OptionData m_NewData = new Dropdown.OptionData();
-            m_NewData.text = options[i];
+            TMP_Dropdown.OptionData m_NewData = new TMP_Dropdown.OptionData();
+            m_NewData.text = "Playing as<b> " + options[i] + " </b>";
 
-            m_Dropdown.options.Add(m_NewData);
+           m_Dropdown.options.Add(m_NewData);
         }
         
         m_Dropdown.value = 0;
-        m_Dropdown.captionText.text = options[0];
+        m_Dropdown.captionText.text = "Playing as<b> " + options[0] + " </b>";
         
     }
 
     private void fillSceneDropdown()
     {
-        Dropdown m_Dropdown;
+        TMP_Dropdown m_Dropdown;
         //Fetch the Dropdown GameObject the script is attached to
-        m_Dropdown = GameObject.Find(SceneDropdownName).GetComponent<Dropdown>();
+        m_Dropdown = GameObject.Find(SceneDropdownName).GetComponent<TMP_Dropdown>();
 
 
         List<string> options = videoData.getScenesOptions();
@@ -62,7 +63,7 @@ public class DropdownFiller : MonoBehaviour
 
         for (int i = 0; i < options.Count; i++)
         {
-            OptionData m_NewData = new Dropdown.OptionData();
+            TMP_Dropdown.OptionData m_NewData = new TMP_Dropdown.OptionData();
             m_NewData.text = options[i];
 
             m_Dropdown.options.Add(m_NewData);

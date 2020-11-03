@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -14,24 +15,16 @@ public class VideoData : MonoBehaviour
     private int currentSceneIndex = 0;
     private int currentCharacterIndex = 0;
 
-    [ContextMenu("OnValidate")]
-    private void OnValidate()
-    {
-        for (int i = 0; i < SceneData.Length; i++)
-        {
-            for (int j = 0; j < SceneData[i].allCharacters.Length; j++)
-            {
-                //System.Array.Sort(storyboardData[i].allCharacters[j].allFrames, (a, b) => a.name.CompareTo(b.name));
-            }
-        }
-    }
 
     private void Start()
     {
         CharacterVp.clip = SceneData[currentSceneIndex].allCharacters[currentCharacterIndex].video;
         SceneOriginalVp.clip = SceneData[currentSceneIndex].origial;
-    }
 
+
+
+
+    }
 
     public List<String> getVideoOptions()
     {
@@ -98,17 +91,19 @@ public class VideoData : MonoBehaviour
     }
 
 
-    public void switchVideo(Dropdown change)
+    public void switchVideo(TMP_Dropdown change)
     {
-        currentCharacterIndex = getVideoIndexByName(change.options[change.value].text);
+        currentCharacterIndex = getVideoIndexByName(change.options[change.value].text.Substring(14, (change.options[change.value].text.Length - 19)));
+
         CharacterVp.clip = SceneData[currentSceneIndex].allCharacters[currentCharacterIndex].video;
         CharacterVp.Prepare();
     }
 
-    public void switchScene(Dropdown change)
+    public void switchScene(TMP_Dropdown change)
     {
         currentSceneIndex = getSceneIndexByName(change.options[change.value].text);
-        CharacterVp.clip = SceneData[currentSceneIndex].allCharacters[0].video;
+        currentCharacterIndex = 0;
+        CharacterVp.clip = SceneData[currentSceneIndex].allCharacters[currentCharacterIndex].video;
         CharacterVp.Prepare();
         SceneOriginalVp.clip = SceneData[currentSceneIndex].origial;
         SceneOriginalVp.Prepare();

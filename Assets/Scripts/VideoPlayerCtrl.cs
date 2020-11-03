@@ -11,7 +11,21 @@ public class VideoPlayerCtrl : MonoBehaviour
     private void Awake()
     {
         vp = GetComponent<VideoPlayer>();
+
+        vp.loopPointReached += EndReached;
+
     }
+
+
+    void EndReached(UnityEngine.Video.VideoPlayer vp)
+    {
+        // Reset video to first frame
+        vp.frame = 0;
+        RenderTexture.active = vp.targetTexture;
+        GL.Clear(true, true, Color.black);
+        RenderTexture.active = null;
+    }
+
 
     public void vpPlay()
     {

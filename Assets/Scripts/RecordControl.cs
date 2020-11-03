@@ -109,10 +109,17 @@ public class RecordControl : MonoBehaviour
 	public void HidePreview()
 	{
         recorderScreenUI.SetActive(true);
-        capturePreviewMenuUI.SetActive(false);
 
 		StopCapturePreview();
-	}
+        Invoke("SetPreviewInactive", 1f);
+
+    }
+
+    private void SetPreviewInactive()
+    {
+        capturePreviewMenuUI.SetActive(false);
+
+    }
 
     public void SetScreenTitle()
     {

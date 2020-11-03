@@ -10,7 +10,7 @@ namespace GetSocialSdk.Capture.Scripts
     {
 
         #region Public fields
-
+        
         /// <summary>
         /// Number of displayed frames per second. Default is 30.
         /// </summary>
@@ -28,6 +28,7 @@ namespace GetSocialSdk.Capture.Scripts
         private List<Texture2D> _framesToPlay;
         private RawImage _rawImage;
         private bool _play;
+        private bool _myPlay;
         private float _playbackStartTime;
         private bool _previewInitialized;
 
@@ -50,6 +51,8 @@ namespace GetSocialSdk.Capture.Scripts
                 gameObject.SetActive(true);
             }
             _play = true;
+            _myPlay = true;
+            Debug.Log("No Of Frames In Gif: " + _framesToPlay.Count);
         }
 
         /// <summary>
@@ -58,6 +61,8 @@ namespace GetSocialSdk.Capture.Scripts
         public void Stop()
         {
             _play = false;
+            _myPlay = false;
+
             _playbackStartTime = 0;
         }
 
@@ -72,6 +77,35 @@ namespace GetSocialSdk.Capture.Scripts
             
             _previewInitialized = false;
         }
+
+
+        public void PlayByMovieFrame(int Frame, int FrameCount)
+        {
+
+            try
+            {
+
+                if (!_myPlay) return;
+                if (_framesToPlay.Count <= 0) return;
+                if (Frame < 0) return;
+
+                int realFrame = (int)((double)((float)_framesToPlay.Count / (float)FrameCount) * Frame);
+
+                if (realFrame >= _framesToPlay.Count)
+                {
+                    Stop();
+                    return;
+                }
+                _rawImage.texture = _framesToPlay[realFrame];
+            }
+            catch {
+
+                Debug.LogError("Error: "+Frame + ", _framesToPlay.Count: " + _framesToPlay.Count + ", FrameCount: " + FrameCount + ", realFrame:" + ((int)((double)((float)_framesToPlay.Count / (float)FrameCount) * Frame)));
+
+            }
+
+        }
+
         #endregion
 
         #region Private methods
@@ -120,20 +154,20 @@ namespace GetSocialSdk.Capture.Scripts
 
         private void Update()
         {
-            if (!_play) return;
-            if (_framesToPlay.Count == 0) return;
-            if (Math.Abs(_playbackStartTime) < 0.0001f)
-            {
-                _playbackStartTime = Time.realtimeSinceStartup;
-                
-            }
-            var index = (int)((Time.realtimeSinceStartup - _playbackStartTime) * playbackFrameRate) % _framesToPlay.Count;
-            _rawImage.texture = _framesToPlay[index];
-            if (index == _framesToPlay.Count - 1 && !loopPlayback)
-            {
-                Debug.LogWarning(" Stop playnig Capture," + Time.realtimeSinceStartup + " Took: " +(Time.realtimeSinceStartup - _playbackStartTime) );
-                _play = false;
-            }
+            //if (!_play) return;
+            //if (_framesToPlay.Count == 0) return;
+            //if (Math.Abs(_playbackStartTime) < 0.0001f)
+            //{
+            //    _playbackStartTime = Time.realtimeSinceStartup;
+            //    
+            //}
+            //var index = (int)((Time.realtimeSinceStartup - _playbackStartTime) * playbackFrameRate) % _framesToPlay.Count;
+            //_rawImage.texture = _framesToPlay[index];
+            //if (index == _framesToPlay.Count - 1 && !loopPlayback)
+            //{
+            //    Debug.LogWarning(" Stop playnig Capture," + Time.realtimeSinceStartup + " Took: " +(Time.realtimeSinceStartup - _playbackStartTime) );
+            //    _play = false;
+            //}
         }
 
 

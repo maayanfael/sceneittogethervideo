@@ -9,6 +9,7 @@ public class Manager : MonoBehaviour
 
     public static bool isAppPaused = false;
     public GameObject settingsMenuUI;
+    public Animator menuAnimator;
     // Update is called once per frame
     void Update()
     {
@@ -22,22 +23,27 @@ public class Manager : MonoBehaviour
             {
                 Pause();
             }
-
-            
         }
     }
 
     public void Pause()
     {
         settingsMenuUI.SetActive(true);
-        Time.timeScale = 0f;
+        //Time.timeScale = 0f;
         isAppPaused = true;
     }
 
     public void Resume()
     {
+        menuAnimator.SetTrigger("Out");
+        Invoke("realResume", 1f);
+
+
+    }
+    void realResume()
+    {
         settingsMenuUI.SetActive(false);
-        Time.timeScale = 1f;
+        //Time.timeScale = 1f;
         isAppPaused = false;
     }
 

@@ -8,6 +8,7 @@ public class ButtonUiCtrl : MonoBehaviour
 
     public Button StartBtn;
     public Button StopBtn;
+    public Button RecordBtn;
     bool isStartBtnActive = false;
     public VideoData vd;
 
@@ -32,6 +33,15 @@ public class ButtonUiCtrl : MonoBehaviour
         isStartBtnActive = false;
         
     }
+
+    public void ShowRecordBtn() {
+        RecordBtn.gameObject.SetActive(true);
+
+    }
+    public void HideRecordBtn() {
+        RecordBtn.gameObject.SetActive(false);
+    }
+
 
     public void HideStopBtn()
     {
